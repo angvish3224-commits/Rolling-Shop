@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Rolling Moto</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <span class="logo-icon">🏍️</span>
+                <span class="logo-text">Rolling Moto</span>
+            </div>
+            <div class="cart-icon" onclick="showCart()">
+                <span class="cart-count" id="cartCount">0</span>
+                🛒
+            </div>
+        </header>
+
+        <!-- Search -->
+        <div class="search-container">
+            <input type="text" class="search-input" placeholder="Поиск мототехники..." id="searchInput" oninput="filterProducts()">
+        </div>
+
+        <!-- Categories -->
+        <div class="categories">
+            <button class="category-btn active" onclick="filterByCategory('all')">Все</button>
+            <button class="category-btn" onclick="filterByCategory('motorcycles')">Мотоциклы</button>
+            <button class="category-btn" onclick="filterByCategory('scooters')">Скутеры</button>
+            <button class="category-btn" onclick="filterByCategory('atv')">Квадроциклы</button>
+            <button class="category-btn" onclick="filterByCategory('parts')">Запчасти</button>
+        </div>
+
+        <!-- Products -->
+        <div class="products-grid" id="productsGrid">
+            <!-- Products will be inserted here -->
+        </div>
+
+        <!-- Product Modal -->
+        <div class="modal" id="productModal">
+            <div class="modal-content">
+                <button class="modal-close" onclick="closeModal()">×</button>
+                <div class="modal-body" id="modalBody">
+                    <!-- Product details will be inserted here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Cart Modal -->
+        <div class="modal" id="cartModal">
+            <div class="modal-content cart-modal-content">
+                <button class="modal-close" onclick="closeCart()">×</button>
+                <h2 class="modal-title">🛒 Корзина</h2>
+                <div class="cart-items" id="cartItems">
+                    <!-- Cart items will be inserted here -->
+                </div>
+                <div class="cart-total" id="cartTotal">
+                    <span>Итого:</span>
+                    <span id="totalPrice">0 ₽</span>
+                </div>
+                <button class="checkout-btn" onclick="checkout()" id="checkoutBtn">Оформить заказ</button>
+            </div>
+        </div>
+
+        <!-- Bottom Nav -->
+        <nav class="bottom-nav">
+            <button class="nav-btn active" onclick="showSection('catalog')">
+                <span class="nav-icon">🏠</span>
+                <span class="nav-label">Каталог</span>
+            </button>
+            <button class="nav-btn" onclick="showSection('favorites')">
+                <span class="nav-icon">❤️</span>
+                <span class="nav-label">Избранное</span>
+            </button>
+            <button class="nav-btn" onclick="showSection('profile')">
+                <span class="nav-icon">👤</span>
+                <span class="nav-label">Профиль</span>
+            </button>
+        </nav>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
