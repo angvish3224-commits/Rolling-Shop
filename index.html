@@ -2,87 +2,389 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Rolling Moto</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <link rel="stylesheet" href="styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RollingMoto - Мотосалон в Смоленске</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="app">
-        <!-- Header -->
-        <header class="header">
-            <div class="logo">
-                <span class="logo-icon">🏍️</span>
-                <span class="logo-text">Rolling Moto</span>
-            </div>
-            <div class="cart-icon" onclick="showCart()">
-                <span class="cart-count" id="cartCount">0</span>
-                🛒
-            </div>
-        </header>
-
-        <!-- Search -->
-        <div class="search-container">
-            <input type="text" class="search-input" placeholder="Поиск мототехники..." id="searchInput" oninput="filterProducts()">
-        </div>
-
-        <!-- Categories -->
-        <div class="categories">
-            <button class="category-btn active" onclick="filterByCategory('all')">Все</button>
-            <button class="category-btn" onclick="filterByCategory('motorcycles')">Мотоциклы</button>
-            <button class="category-btn" onclick="filterByCategory('scooters')">Скутеры</button>
-            <button class="category-btn" onclick="filterByCategory('atv')">Квадроциклы</button>
-            <button class="category-btn" onclick="filterByCategory('parts')">Запчасти</button>
-        </div>
-
-        <!-- Products -->
-        <div class="products-grid" id="productsGrid">
-            <!-- Products will be inserted here -->
-        </div>
-
-        <!-- Product Modal -->
-        <div class="modal" id="productModal">
-            <div class="modal-content">
-                <button class="modal-close" onclick="closeModal()">×</button>
-                <div class="modal-body" id="modalBody">
-                    <!-- Product details will be inserted here -->
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-text">Rolling<span>Moto</span></div>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="#home">Главная</a></li>
+                        <li><a href="#features">Преимущества</a></li>
+                        <li><a href="#brands">Производители</a></li>
+                        <li><a href="#bikes">Мотоциклы</a></li>
+                        <li><a href="#about">О нас</a></li>
+                        <li><a href="#contact">Контакты</a></li>
+                    </ul>
+                </nav>
+                <div class="header-actions">
+                    <div class="user-profile" id="userProfile">
+                        <div class="user-menu">
+                            <div class="user-avatar" id="userAvatar"></div>
+                            <div class="user-dropdown" id="userDropdown">
+                                <a href="profile/profile.html">Личный кабинет</a>
+                                <a href="#" id="logoutBtn">Выйти</a>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="#" class="btn" id="authBtn">Войти</a>
+                    <a href="#contact" class="btn">Связаться</a>
                 </div>
             </div>
         </div>
+    </header>
 
-        <!-- Cart Modal -->
-        <div class="modal" id="cartModal">
-            <div class="modal-content cart-modal-content">
-                <button class="modal-close" onclick="closeCart()">×</button>
-                <h2 class="modal-title">🛒 Корзина</h2>
-                <div class="cart-items" id="cartItems">
-                    <!-- Cart items will be inserted here -->
-                </div>
-                <div class="cart-total" id="cartTotal">
-                    <span>Итого:</span>
-                    <span id="totalPrice">0 ₽</span>
-                </div>
-                <button class="checkout-btn" onclick="checkout()" id="checkoutBtn">Оформить заказ</button>
+    <!-- Auth Modal -->
+    <div class="auth-modal" id="authModal">
+        <div class="auth-content">
+            <span class="close-auth" id="closeAuth">&times;</span>
+            <div class="auth-tabs">
+                <div class="auth-tab active" data-tab="login">Вход</div>
+                <div class="auth-tab" data-tab="register">Регистрация</div>
             </div>
+            <form class="auth-form active" id="login-form">
+                <div class="form-group">
+                    <label for="login-email">Email</label>
+                    <input type="email" id="login-email" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Пароль</label>
+                    <input type="password" id="login-password" class="form-control" required>
+                </div>
+                <button type="submit" class="btn" style="width: 100%;">Войти</button>
+            </form>
+            <form class="auth-form" id="register-form">
+                <div class="form-group">
+                    <label for="register-name">Имя</label>
+                    <input type="text" id="register-name" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-email">Email</label>
+                    <input type="email" id="register-email" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-password">Пароль</label>
+                    <input type="password" id="register-password" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-confirm">Подтвердите пароль</label>
+                    <input type="password" id="register-confirm" class="form-control" required>
+                </div>
+                <button type="submit" class="btn" style="width: 100%;">Зарегистрироваться</button>
+            </form>
         </div>
-
-        <!-- Bottom Nav -->
-        <nav class="bottom-nav">
-            <button class="nav-btn active" onclick="showSection('catalog')">
-                <span class="nav-icon">🏠</span>
-                <span class="nav-label">Каталог</span>
-            </button>
-            <button class="nav-btn" onclick="showSection('favorites')">
-                <span class="nav-icon">❤️</span>
-                <span class="nav-label">Избранное</span>
-            </button>
-            <button class="nav-btn" onclick="showSection('profile')">
-                <span class="nav-icon">👤</span>
-                <span class="nav-label">Профиль</span>
-            </button>
-        </nav>
     </div>
 
-    <script src="app.js"></script>
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container">
+            <h1>Мотосалон <span>RollingMoto</span> в Смоленске</h1>
+            <p>Мы предлагаем широкий выбор мотоциклов, запчастей и аксессуаров. Опытные специалисты и качественный сервис.</p>
+            <div class="hero-buttons">
+                <a href="#brands" class="btn">Наши производители</a>
+                <a href="#contact" class="btn btn-outline">Консультация</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-title">
+                <h2>Почему выбирают нас</h2>
+                <p>Мы предоставляем лучший сервис и условия для всех любителей мотоциклов</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Гарантия качества</h3>
+                    <p>Все мотоциклы проходят тщательную проверку перед продажей. Предоставляем официальную гарантию.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-tools"></i>
+                    </div>
+                    <h3>Профессиональный сервис</h3>
+                    <p>Наш сервисный центр оснащен современным оборудованием и укомплектован опытными специалистами.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-tags"></i>
+                    </div>
+                    <h3>Доступные цены</h3>
+                    <p>Предлагаем гибкую систему скидок и выгодные условия кредитования для наших клиентов.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Brands Section -->
+    <section class="brands" id="brands">
+        <div class="container">
+            <div class="section-title">
+                <h2>Наши производители</h2>
+                <p>Мы сотрудничаем с ведущими производителями мотоциклов</p>
+            </div>
+            <div class="brands-grid">
+                <div class="brand-card">
+                    <div class="brand-logo kayo-logo">KAYO</div>
+                    <div class="brand-info">
+                        <h3>Kayo</h3>
+                        <p>Современные и надежные мотоциклы для города и бездорожья</p>
+                        <a href="brand/kayo.html" class="btn">Смотреть модели</a>
+                    </div>
+                </div>
+                <div class="brand-card">
+                    <div class="brand-logo ataki-logo">ATAKI</div>
+                    <div class="brand-info">
+                        <h3>Ataki</h3>
+                        <p>Мотоциклы с уникальным дизайном и передовыми технологиями</p>
+                        <a href="brand/ataki.html" class="btn">Смотреть модели</a>
+                    </div>
+                </div>
+                <div class="brand-card">
+                    <div class="brand-logo gr-logo">GR</div>
+                    <div class="brand-info">
+                        <h3>GR</h3>
+                        <p>Экономичные и практичные модели для ежедневного использования</p>
+                        <a href="brand/gr.html" class="btn">Смотреть модели</a>
+                    </div>
+                </div>
+                <div class="brand-card">
+                    <div class="brand-logo zontes-logo">ZONTES</div>
+                    <div class="brand-info">
+                        <h3>ZONTES</h3>
+                        <p>Инновационные мотоциклы с премиальным оснащением</p>
+                        <a href="brand/zontes.html" class="btn">Смотреть модели</a>
+                    </div>
+                </div>
+                <div class="brand-card">
+                    <div class="brand-logo groza-logo">GROZA</div>
+                    <div class="brand-info">
+                        <h3>GROZA</h3>
+                        <p>Мощные и выносливые мотоциклы для настоящих энтузиастов</p>
+                        <a href="brand/groza.html" class="btn">Смотреть модели</a>
+                    </div>
+                </div>
+                <div class="brand-card">
+                    <div class="brand-logo cyclone-logo">CYCLONE</div>
+                    <div class="brand-info">
+                        <h3>CYCLONE</h3>
+                        <p>Спортивные модели с отличными динамическими характеристиками</p>
+                        <a href="brand/cyclone.html" class="btn">Смотреть модели</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bikes Section -->
+    <section class="bikes" id="bikes">
+        <div class="container">
+            <div class="section-title">
+                <h2>Популярные модели</h2>
+                <p>Самые востребованные мотоциклы в нашем салоне</p>
+            </div>
+            <div class="bikes-grid">
+                <div class="bike-card">
+                    <div class="bike-image" style="background-image: url('https://avatars.mds.yandex.net/i?id=944b3396487b76008988682d947e4637_l-5313756-images-thumbs&n=13');"></div>
+                    <div class="bike-info">
+                        <h3>Harley-Davidson Street Glide</h3>
+                        <p>Классический чоппер с характерным звуком и комфортной посадкой.</p>
+                        <div class="bike-price">2 100 000 руб.</div>
+                        <a href="#contact" class="btn">Узнать больше</a>
+                    </div>
+                </div>
+                <div class="bike-card">
+                    <div class="bike-image" style="background-image: url('https://i.pinimg.com/originals/32/a0/f9/32a0f9552aa655a91e2a3bca822947ec.jpg');"></div>
+                    <div class="bike-info">
+                        <h3>Kawasaki Ninja 650</h3>
+                        <p>Идеальный баланс мощности и управляемости для городских поездок.</p>
+                        <div class="bike-price">850 000 руб.</div>
+                        <a href="#contact" class="btn">Узнать больше</a>
+                    </div>
+                </div>
+                <div class="bike-card">
+                    <div class="bike-image" style="background-image: url('https://www.yamaha-motor.ru/upload/iblock/4a5/4a5c9a5c9a5c9a5c9a5c9a5c9a5c9a5c.jpg');"></div>
+                    <div class="bike-info">
+                        <h3>Yamaha YZF-R1</h3>
+                        <p>Спортивный мотоцикл с мощным двигателем и передовой электроникой.</p>
+                        <div class="bike-price">1 250 000 руб.</div>
+                        <a href="#contact" class="btn">Узнать больше</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-image" style="background-image: url('https://avatars.mds.yandex.net/i?id=a04fc7696e3715fb74cdb6637bcbbc56_sr-3833005-images-thumbs&n=13');"></div>
+                <div class="about-text">
+                    <h2>О компании RollingMoto</h2>
+                    <p>RollingMoto - это ведущий мотосалон в Смоленске, который работает на рынке уже более 10 лет. Мы специализируемся на продаже новых и подержанных мотоциклов, а также предоставляем полный спектр услуг по обслуживанию и ремонту.</p>
+                    <p>Наша команда состоит из опытных энтузиастов, которые сами являются активными мотоциклистами. Мы понимаем потребности наших клиентов и готовы предложить оптимальные решения.</p>
+                    <div class="about-features">
+                        <div class="about-feature">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Более 10 лет на рынке</span>
+                        </div>
+                        <div class="about-feature">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Широкий ассортимент мотоциклов</span>
+                        </div>
+                        <div class="about-feature">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Собственный сервисный центр</span>
+                        </div>
+                        <div class="about-feature">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Гибкие условия оплаты</span>
+                        </div>
+                    </div>
+                    <a href="#contact" class="btn" style="margin-top: 20px;">Связаться с нами</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
+        <div class="container">
+            <div class="section-title">
+                <h2>Контакты</h2>
+                <p>Свяжитесь с нами для получения дополнительной информации</p>
+            </div>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <h3>Наши контакты</h3>
+                    <div class="contact-detail">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>г. Смоленск, ул. Мотостроителей, д. 15</span>
+                    </div>
+                    <div class="contact-detail">
+                        <i class="fas fa-phone"></i>
+                        <span>+7 (4812) 12-34-56</span>
+                    </div>
+                    <div class="contact-detail">
+                        <i class="fas fa-envelope"></i>
+                        <span>info@rollingmoto.ru</span>
+                    </div>
+                    <div class="contact-detail">
+                        <i class="fas fa-clock"></i>
+                        <span>Пн-Пт: 9:00 - 19:00, Сб-Вс: 10:00 - 17:00</span>
+                    </div>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-vk"></i></a>
+                        <a href="#"><i class="fab fa-telegram"></i></a>
+                        <a href="https://wa.me/74812123456" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="contact-form">
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <label for="name">Ваше имя</label>
+                            <input type="text" id="name" class="form-control" placeholder="Иван Иванов" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Телефон</label>
+                            <input type="tel" id="phone" class="form-control" placeholder="+7 (XXX) XXX-XX-XX" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" class="form-control" placeholder="example@mail.ru" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Сообщение</label>
+                            <textarea id="message" class="form-control" rows="5" placeholder="Ваше сообщение..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn">Отправить сообщение</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>RollingMoto</h3>
+                    <p>Лучший мотосалон в Смоленске с широким ассортиментом мотоциклов и профессиональным сервисом.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-vk"></i></a>
+                        <a href="#"><i class="fab fa-telegram"></i></a>
+                        <a href="https://wa.me/74812123456" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Категории</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Спортивные мотоциклы</a></li>
+                        <li><a href="#">Круизеры</a></li>
+                        <li><a href="#">Эндуро</a></li>
+                        <li><a href="#">Классика</a></li>
+                        <li><a href="#">Скутеры</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Полезные ссылки</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">О компании</a></li>
+                        <li><a href="#">Сервис и ремонт</a></li>
+                        <li><a href="#">Акции</a></li>
+                        <li><a href="#">Блог</a></li>
+                        <li><a href="#">Вакансии</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Контакты</h3>
+                    <ul class="footer-links">
+                        <li><i class="fas fa-map-marker-alt"></i> г. Смоленск, ул. Мотостроителей, д. 15</li>
+                        <li><i class="fas fa-phone"></i> +7 (4812) 12-34-56</li>
+                        <li><i class="fas fa-envelope"></i> info@rollingmoto.ru</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 RollingMoto. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="scripts/auth.js"></script>
+    <script src="scripts/common.js"></script>
+    <script>
+        // Обработка формы обратной связи
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const phone = document.getElementById('phone').value;
+            const email = document.getElementById('email').value;
+            const message = document.getElementById('message').value;
+            
+            // Отправка данных на сервер
+            sendContactForm({ name, phone, email, message });
+            
+            // Очистка формы
+            document.getElementById('contactForm').reset();
+        });
+    </script>
 </body>
 </html>
